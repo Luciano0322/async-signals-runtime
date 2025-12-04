@@ -650,10 +650,10 @@ flowchart TD
     end
 
     subgraph Libraries["State / Data / Stream Libraries"]
-        L1[Redux<br/>(State Container)]
-        L2[MobX<br/>(Reactive Store)]
-        L3[RxJS<br/>(Stream / Observable)]
-        L4[React Query / TanStack Query<br/>(Data Fetching)]
+        L1["Redux<br/>(State Container)"]
+        L2["MobX<br/>(Reactive Store)"]
+        L3["RxJS<br/>(Stream / Observable)"]
+        L4["React Query / TanStack Query<br/>(Data Fetching)"]
     end
 
     subgraph Application["Application Code"]
