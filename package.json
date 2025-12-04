@@ -1,0 +1,19 @@
+{
+  "name": "async-signals-runtime",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A research whitepaper and prototype exploring an async-first, fine-grained reactive runtime.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "echo \"No runtime yet. Whitepaper-only repo.\"",
+    "build": "echo \"Nothing to build. This is a research repo.\""
+  },
+  "keywords": [
+    "reactivity",
+    "signals",
+    "async",
+    "runtime",
+    "research"
+  ]
+}
