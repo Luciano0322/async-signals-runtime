@@ -123,15 +123,15 @@ effect()        // side effects
 
 But asyncSignal has special semantics:  
 - **async propagation**  
-  Every async update creates a “future node” in the graph.
+    Every async update creates a “future node” in the graph.
 - **transactional commit**  
-  Async chains commit results in a controlled boundary.
+    Async chains commit results in a controlled boundary.
 - **stale protection**  
-  Older async resolves cannot overwrite new values.
+    Older async resolves cannot overwrite new values.
 - **cancellable futures**  
-  Every async node holds a token for cancellation.
+    Every async node holds a token for cancellation.
 - **scheduler integration**  
-  Async jobs enter a unified priority queue.
+    Async jobs enter a unified priority queue.
 
 For example, in a UI or dataflow context:  
 ```ts
@@ -176,9 +176,9 @@ Each async signal creates a *resolve cycle*:
 1. Start async task  
 2. Freeze current dependencies  
 3. On resolution:  
-  - check staleness  
-  - commit transaction  
-  - propagate through graph  
+    - check staleness  
+    - commit transaction  
+    - propagate through graph  
 
 ### 5.2 Stale Protection
 Each async task is tagged with a monotonically increasing `version`.  
@@ -221,13 +221,13 @@ We distinguish three phases:
 Key invariants:
 
 - **I1 – No partial visibility**  
-  Effects and renderers only observe states that have passed a commit.
+    Effects and renderers only observe states that have passed a commit.
 - **I2 – All-or-nothing per transaction**  
-  For a given transaction, either all derived nodes are updated consistently, or
-  none are (e.g. if an async task is cancelled or becomes stale).
+    For a given transaction, either all derived nodes are updated consistently, or
+    none are (e.g. if an async task is cancelled or becomes stale).
 - **I3 – Monotonic freshness**  
-  When combined with version tags on async tasks, committed states are always
-  at least as fresh as any previously visible state.
+    When combined with version tags on async tasks, committed states are always
+    at least as fresh as any previously visible state.
 
 For synchronous updates, transactions are typically very small and may correspond
 to a single batched tick (e.g. one microtask flush).
@@ -310,10 +310,10 @@ In this model:
 
 ```mermaid
 flowchart TD
-  A["Application Code"]
-  A --> C["Framework Adapter<br>(React / Vue / Solid / Qwik)"]
-  C --> B["UI Renderer<br>(DOM / Native / Canvas / WebGPU)"]
-  C --> D["Async Signals Runtime<br>(Kernel)"]
+    A["Application Code"]
+    A --> C["Framework Adapter<br>(React / Vue / Solid / Qwik)"]
+    C --> B["UI Renderer<br>(DOM / Native / Canvas / WebGPU)"]
+    C --> D["Async Signals Runtime<br>(Kernel)"]
 
 ```
 
@@ -507,8 +507,8 @@ The core idea:
 - The **UI tree** is framework-specific (React, Solid, Vue, etc.).  
 - The **state & async dataflow** is managed by the Async Signals Runtime.  
 - Hydration becomes primarily a **"re-attaching"** process:  
-  - the client restores a previously committed graph snapshot,  
-  - then resumes async propagation from a consistent baseline.  
+    - the client restores a previously committed graph snapshot,  
+    - then resumes async propagation from a consistent baseline.  
 
 ### C.1 High-Level Server–Client Flow
 ```mermaid
@@ -571,14 +571,14 @@ flowchart LR
 Notes:
 - The graph itself does not need to be fully serialized; in practice,
 frameworks may serialize only:  
-  - source signal values,  
-  - enough metadata to reconstruct dependencies,  
-  - version information to protect against stale async updates.  
+    - source signal values,  
+    - enough metadata to reconstruct dependencies,  
+    - version information to protect against stale async updates.  
 
 - Once the client runtime is initialized, no special “hydration mode” is
 required in the kernel:  
-  - all subsequent updates (sync or async) go through the same pipeline.  
-  - the UI framework is responsible for mapping effects to the existing DOM.
+    - all subsequent updates (sync or async) go through the same pipeline.  
+    - the UI framework is responsible for mapping effects to the existing DOM.
 
 ### C.3 Hydration and Async Ordering
 ```mermaid
@@ -611,16 +611,16 @@ remain identical to a pure client-side environment.
 
 ### C.4 Division of Responsibilities
 - Kernel / Runtime (this proposal):  
-  - maintains the dependency graph  
-  - manages sync + async scheduling  
-  - enforces versioning and stale protection  
-  - defines commit phases and transaction semantics  
+    - maintains the dependency graph  
+    - manages sync + async scheduling  
+    - enforces versioning and stale protection  
+    - defines commit phases and transaction semantics  
 
 - UI Framework:  
-  - defines components / templates / JSX  
-  - maps effects to DOM / virtual DOM / platform primitives  
-  - decides how to serialize and restore the view tree  
-  - orchestrates when to invoke the runtime during hydration  
+    - defines components / templates / JSX  
+    - maps effects to DOM / virtual DOM / platform primitives  
+    - decides how to serialize and restore the view tree  
+    - orchestrates when to invoke the runtime during hydration  
 
 By keeping hydration concerns at the UI/rendering layer, and async/state
 concerns at the runtime layer, frameworks can experiment with different
@@ -670,18 +670,18 @@ flowchart TD
 
 Interpretation:  
 - **Kernel**  
-  - defines how state changes propagate  
-  - manages dependency graphs & scheduling  
-  - integrates sync + async + effects  
-  - is framework-agnostic and can power multiple UI systems  
+    - defines how state changes propagate  
+    - manages dependency graphs & scheduling  
+    - integrates sync + async + effects  
+    - is framework-agnostic and can power multiple UI systems  
 - **Frameworks**  
-  - define component models, templates, JSX, routing, hydration  
-  - build on top of a kernel (explicitly or implicitly)  
-  - expose APIs used directly by applications  
+    - define component models, templates, JSX, routing, hydration  
+    - build on top of a kernel (explicitly or implicitly)  
+    - expose APIs used directly by applications  
 - **Libraries**
-  - solve narrower concerns: state storage, data fetching, streams  
-  - may internally implement small reactive systems  
-  - do not define the global execution model of the UI runtime  
+    - solve narrower concerns: state storage, data fetching, streams  
+    - may internally implement small reactive systems  
+    - do not define the global execution model of the UI runtime  
 
 In this sense, an async-first signal runtime aims to behave like a kernel:  
 it provides a shared execution substrate on which both frameworks and
